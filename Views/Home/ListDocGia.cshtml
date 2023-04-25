@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Quanlythuvien.Models.DocGia>
+@using Quanlythuvien.Models
+@{
+    ViewBag.Title = "ListDocGia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var khoa = ViewData["khoa"] as List<Khoa>;
+}
+
+<main>
+
+    <div class="page-header">
+        <div>
+            <h1>Xem thông tin hội viên</h1>
+            <small>Trang chủ / Xem thông tin hội viên</small>
+        </div>
+    </div>
+
+    <!-- Thông tin mượn sách -->
+    <div class="page-content" style="display:flex; justify-content:space-between;">
+        <div class="">
+            <a class="link-button active" href="@Url.Action("ListDocGia","Home")">Xem thông tin hội viên</a>
+            <a class="link-button" href="@Url.Action("CreateDG","Home")">Thêm độc giả</a>
+        </div>
+        
+        <div class="">
+
+            @using (Html.BeginForm("ListDocGia", "Home"))
+            {
+                <label for="">Mã hội viên:</label>
+                <input type="text" placeholder="VD:DG00001" name="key">
+                <button class="btn btn-update-book" id="" style="margin-right:72px;" type="submit">Tìm kiếm</button>
+            }
+
+        </div>
+    </div>
+
+
+
+    <div class="page-content">
+        <div>
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th>Mã hội viên</th>
+                        <th>Tên hội viên</th>
+                        <th>MSSV/MSGV</th>
+                        <th>Ngày sinh</th>
+                        <th>Giới tính</th>
+                        <th>Khoa</th>
+                        <th>Số điện thoại</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.MaDocGia</td>
+                            <td>@item.TenDocGia</td>
+                            <td>@item.MaSo</td>
+                            <td>@item.NgaySinh.Value.ToString("dd-MM-yyyy")</td>
+                            <td>@item.GioiTinh</td>
+                            <td>
+                                @khoa.FirstOrDefault(g => g.Id==item.Khoa).TenKhoa
+                            </td>
+                            <td>
+                                @item.SDT
+                            </td>
+                            <td>
+                                <a href="@Url.Action("SuaDG", "Home", new {Id=item.MaDocGia})" style=" background-color: var(--main-color); color: #fff; border: none; padding: 16px; font-size: 16px; cursor: pointer;">Sửa</a>
+                                &nbsp;
+                                <a href="@Url.Action("XoaDG", "Home", new {Id=item.MaDocGia})" style=" background-color: var(--main-color); color: #fff; border: none; padding: 16px; font-size: 16px; cursor: pointer;">Xóa</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+</table>
+
+        </div>
+    </div>
+</main>
+<script src="./app.js"></script>
+

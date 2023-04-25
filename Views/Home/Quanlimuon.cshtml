@@ -1,0 +1,109 @@
+﻿@model IEnumerable<Quanlythuvien.Models.MuonSach>
+
+@using Quanlythuvien.Models
+@{
+    ViewBag.Title = "Quanlimuon";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var list = ViewData["MuonSach"] as List<MuonSach>;
+    var list2 = ViewData["hoivien"] as List<DocGia>;
+}
+
+<main>
+
+    <div class="page-header">
+        <div>
+            <h1>Kiểm tra phiếu mượn</h1>
+            <small>Trang chủ / Kiểm tra phiếu mượn</small>
+        </div>
+    </div>
+    <div class="page-content">
+        <a class="link-button active" href="@Url.Action("Quanlimuon","Home")">Kiểm tra phiếu mượn</a>
+        <a class="link-button " href="@Url.Action("MuonSach","Home")">Mượn sách</a>
+
+    </div>
+
+
+
+    <!-- Search Section -->
+    <div class="page-content">
+        <h3 class="header-search">Nhập thông tin sách</h3>
+        <input type="text" placeholder="Nhập mã sách, tên sách, tác giả" class="search-book-input">
+        <button class="btn btn-find-book" id="">Tìm kiếm</button>
+        <button class="btn btn-update-book" id="open-modal">Gia hạn thời gian mượn sách</button>
+        <select name="" id="" class="select-sort">
+            <option value="">Thứ tự A-Z</option>
+            <option value="">Thứ tự Z-A</option>
+        </select>
+    </div>
+
+    <!-- Danh sách sách -->
+    <form action="/Home/GiaHanMuonSach" method="post">
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="modal-list">
+                    <div class="modal-item">
+                        <h4 class="modal-heading">Mã độc giả</h4>
+                        <select name="DocGia" class="form-group">
+                            @foreach (var item in Model)
+                            {
+                                <option value="@item.MaDocGia">@item.MaDocGia</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="modal-item">
+                        <h4 class="modal-heading">Tên sách</h4>
+                       
+                    </div>
+                    <div class="modal-item">
+                        <h4 class="modal-heading">Ngày gia hạn</h4>
+                        
+                        <input type="date" placeholder="Nhập ngày gia hạn" name="ngay-gia-han">
+                    </div>
+                </div>
+                <button id="update-book-list" class="btn btn-update-book-modal" type="submit">Cập nhật</button>
+            </div>
+        </div>
+    </form>
+    <div class="page-content">
+
+        <div>
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th>Mã phiếu</th>
+                        <th>Tên hội viên</th>
+                        <th>Mã hội viên</th>
+                        <th>Mã sách</th>
+                        <th>Ngày mượn</th>
+                        <th>Ngày hẹn trả</th>
+                        <th>Thời hạn</th>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        DateTime ngaymuon = Convert.ToDateTime(@item.NgayMuon);
+                        DateTime ngaytra = Convert.ToDateTime(item.NgayHenTra);
+                        TimeSpan Time = ngaytra - ngaymuon;
+                        int TongSoNgay = Time.Days;
+                        <tr>
+                            <td>@item.MaPhieu</td>
+                            <td>@list2.FirstOrDefault(g => g.MaDocGia == item.MaDocGia).TenDocGia</td>
+                            <td>@item.MaDocGia</td>
+                            <td>@item.MaSach</td>
+                            <td>@item.NgayMuon.Value.ToString("dd-MM-yyyy")</td>
+                            <td>@item.NgayHenTra.Value.ToString("dd-MM-yyyy")</td>
+                            <td>@TongSoNgay Ngày</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</main>
+    <script src="~/Scripts/app.js"></script>

@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Quanlythuvien.Models.NhanVien>
+@using Quanlythuvien.Models
+@{
+    ViewBag.Title = "Danh sách nhân viên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main>
+
+    <div class="page-header">
+        <div>
+            <h1>Xem thông tin nhân viên</h1>
+            <small>Trang chủ / Xem thông tin nhân viên</small>
+        </div>
+    </div>
+
+    <!-- Thông tin mượn sách -->
+    <div class="page-content" style="display:flex; justify-content:space-between;">
+        <div class="">
+            <a class="link-button active" href="@Url.Action("Quanlinv","Home")">Xem thông tin nhân viên</a>
+            <a class="link-button" href="@Url.Action("CreateNV","Home")">Thêm nhân viên</a>
+        </div>
+
+        <div class="">
+
+            @using (Html.BeginForm("Quanlinv", "Home"))
+            {
+                <label for="">Mã nhân viên:</label>
+                <input type="text" placeholder="VD:NV00001" name="key">
+                <button class="btn btn-update-book" id="" style="margin-right:72px;" type="submit">Tìm kiếm</button>
+            }
+
+        </div>
+    </div>
+
+
+
+    <div class="page-content">
+        <div>
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th>Mã nhân viên</th>
+                        <th>Tên nhân viên</th>
+                        <th>Ngày sinh</th>
+                        <th>Số điện thoại</th>
+                        <th>Giới tính</th>
+                        <th>Ảnh đại diện</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.MaNV</td>
+                            <td>@item.HoTen</td>
+                            <td>@item.NgaySinh.Value.ToString("dd-MM-yyyy")</td>
+
+                            <td>
+                                @item.SDT
+                            </td>
+                            <td>@item.GioiTinh</td>
+                            <td><img src="~/img/@item.HinhAnh" width="100px" height="100px" /></td>
+                            <td><a href="@Url.Action("SuaNV", "Home", new {Id=item.MaNV})" style=" background-color: var(--main-color); color: #fff; border: none; padding: 16px; font-size: 16px; cursor: pointer;">Sửa</a>
+                            &nbsp;
+                                <a href="@Url.Action("XoaNV", "Home", new {Id=item.MaNV})" style=" background-color: var(--main-color); color: #fff; border: none; padding: 16px; font-size: 16px; cursor: pointer;">Xóa</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<script src="./app.js"></script>
+

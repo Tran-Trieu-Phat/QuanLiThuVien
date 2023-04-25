@@ -1,0 +1,126 @@
+﻿@model IEnumerable<Quanlythuvien.Models.Sach>
+    @using Quanlythuvien.Models
+    @{
+        ViewBag.Title = "DanhMucSach";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        var tl = ViewData["tl"] as List<TheLoai>;
+    }
+
+<main>
+
+    <div class="page-header">
+        <div>
+            <h1>Danh mục sách</h1>
+            <small>Trang chủ / Danh mục sách</small>
+        </div>
+        <button class="btn btn-update-book" id="open-modal">Cập nhật danh mục sách</button>
+    </div>
+    @using (Html.BeginForm("DanhMucSach", "Home"))
+    {
+        <div class="page-content">
+            <h3 class="header-search">Nhập thông tin sách</h3>
+            <div style="display:flex">
+                <input type="text" placeholder="Nhập mã sách, tên sách, tác giả" class="search-book-input" name="keysearch">
+                <select name="sapxep" id="" class="select-sort" style="margin-right:20px">
+                    <option value="1">Thứ tự A-Z</option>
+                    <option value="2">Thứ tự Z-A</option>
+                </select>
+                <button class="btn btn-find-book" id="" type="submit">Tìm kiếm</button>
+            </div>
+           
+        </div>
+    }
+
+    <!-- The Modal -->
+    <form action="/Home/CapNhatTrangThai" method="post">
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="modal-list">
+                    <div class="modal-item">
+                        <h4 class="modal-heading">Mã Sách</h4>
+                        <input type="text" placeholder="Nhập mã sách" name="ma">
+                    </div>
+                    <div class="modal-item">
+                        <h4 class="modal-heading">Thể loại</h4>
+                        <select name="TheLoai" class="form-group">
+                            @foreach (var item in tl)
+                            {
+                                <option value="@item.Id">@item.TenLoai</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="modal-item">
+                        <h4 class="modal-heading">Tình trạng</h4>
+                        <select name="tinh-trang-sach" id="tinh-trang-sach">
+                            <option value="1">Sử dụng</option>
+                            <option value="2">Được mượn</option>
+                            <option value="3">Quá hạn</option>
+                            <option value="4">Hư hỏng</option>
+                            <option value="5">Thanh lý</option>
+
+                        </select>
+                    </div>
+                </div>
+                <button id="update-book-list" class="btn btn-update-book-modal" type="submit">Cập nhật</button>
+            </div>
+        </div>
+    </form>
+    <div class="page-content">
+        <div>
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th>Mã sách</th>
+                        <th>Tên sách</th>
+                        <th>Thể loại</th>
+                        <th>Tác giả</th>
+                        <th>Nhà xuất bản</th>
+                        <th>Tình trạng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                        @foreach (var item in Model)
+                        {<tr>
+                            <td>@item.MaSach</td>
+                            <td>@item.TenSach</td>
+                            <td>@tl.FirstOrDefault(g => g.Id == item.Id_TL).TenLoai</td>
+                            <td>@item.TacGia</td>
+                            <td>@item.NhaXB</td>
+                            <td>
+
+
+
+                                @if (item.TinhTrang == 1)
+                                {
+                                    <span class="btn btn-paid">Sử dụng</span>
+                                }
+                                else if (item.TinhTrang == 2)
+                                {
+                                    <span class="btn btn-borrow">Được mượn</span>
+                                }
+                                else if (item.TinhTrang == 3)
+                                {
+                                    <span class="btn btn-over-time">Quá hạn</span>
+                                }
+                                else if (item.TinhTrang == 4)
+                                {
+                                    <span class="btn btn-damaged">Hư hỏng</span>
+                                }
+                                else if (item.TinhTrang == 5)
+                                {
+                                    <span class="btn btn-sell">Thanh lý</span>
+                                }
+                            </td>
+                    </tr>
+                        }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</main>
+
+    <script src="~/Scripts/app.js"></script>

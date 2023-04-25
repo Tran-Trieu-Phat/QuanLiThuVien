@@ -1,0 +1,100 @@
+﻿@model IEnumerable<Quanlythuvien.Models.Phong>
+@using Quanlythuvien.Models
+@{
+    ViewBag.Title = "QuanLiPhong";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main>
+
+    <div class="page-header">
+        <div>
+            <h1>Quản lý phòng họp</h1>
+            <small>Trang chủ / Quản lý phòng họp</small>
+        </div>
+        <div class="">
+            <select name="tinhtrang" id="tinhtrang" onchange="load()">
+                <option value="">
+                    --Tình trạng--
+                </option>
+                <option value="3">Tất cả</option>
+                <option value="1">
+                    Trống
+                </option>
+                <option value="2">
+                    Đang sử dụng
+                </option>
+            </select>
+            <button class="btn btn-update-book" id="open-modal">Thuê phòng</button>
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-list">
+                <div class="modal-item">
+                    <h4 class="modal-heading" style="text-align:center ;">Nhập mã phòng</h4>
+                    <label for="">Mã phòng:</label>
+                    <select>
+                        @foreach (var m in Model.Where(g => g.TinhTrang == 1))
+                        {
+                            <option value="@m.Id">@m.TenPhong</option>
+                        }
+
+                    </select>
+                </div>
+            </div>
+            <button id="update-book-list" class="btn btn-update-book-modal">Xác nhận</button>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div>
+            <table width="100%" style="text-align: center;">
+                <thead>
+                    <tr>
+                        <th style="text-align:center;">Mã phòng</th>
+                        <th style="text-align:center;">Tên phòng</th>
+                        <th style="text-align:center;">Tình trạng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var m in Model)
+                    {
+                        <tr>
+                            <td>@m.Id</td>
+                            <td>@m.TenPhong</td>
+                            @if (m.TinhTrang == 1)
+                            {
+
+
+                                <td><span class="btn btn-paid">Trống</span></td>
+                            }
+                            else
+                            {
+                                <td> <span class="btn btn-borrow">Đang sử dụng</span></td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</main>
+<script src="~/Scripts/app.js"></script>
+<script>
+    function load() {
+        debugger;
+        var m = document.getElementById('tinhtrang').value;
+        if (m != ""&&m<3) {
+            window.location.href = '/Home/QuanLiPhong?Id=' + m;
+        } else if(m==3){
+            window.location.href = '/Home/QuanLiPhong';
+        }
+    }
+</script>
